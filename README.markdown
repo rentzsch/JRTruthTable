@@ -20,7 +20,7 @@ I can express that all with the following JRTruthTable object:
                                  JRNO,           JRNO,               @"NoUI",
                                  nil] autorelease];
 
-The first line is the truth table's column headers. There's two condition's I'm keeping track of, `upekPresent` and `puppyPresent`. The rest of the lines list out every possible combination and the third column indicates what state that represents.
+The first line is the truth table's column headers. There are two conditions I'm keeping track of, `upekPresent` and `puppyPresent`. The rest of the lines list out every possible combination and the third column indicates what state that represents.
 
 The first row of conditions is automatically assumed to be the current conditions, so `truthTable.currentState` would return `UpekUI` off the bat. Let's say I scan the USB bus and discover the Upek device isn't present. I issue a call to `[truthTable updateCondition:@"upekPresent" value:JRNO]` and `truthTable.currentState` would return `PuppyUI`.
 
