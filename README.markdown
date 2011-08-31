@@ -24,4 +24,4 @@ The first line is the truth table's column headers. There are two conditions I'm
 
 The first row of conditions is automatically assumed to be the current conditions, so `truthTable.currentState` would return `UpekUI` off the bat. Let's say I scan the USB bus and discover the Upek device isn't present. I issue a call to `[truthTable updateCondition:@"upekPresent" value:JRNO]` and `truthTable.currentState` would return `PuppyUI`.
 
-The condition row's state doesn't have to be an `NSString` -- I just used it here for simplicity. It's an `id`, so I can be any object. A cool thing to stash in there is an `NSInvocation` to associate behavior with a specific state.
+The condition row's state doesn't have to be an `NSString` -- I just used it here for simplicity. It's an `id`, so it can be any object. A cool thing to stash in there is an `NSInvocation` to associate behavior with a specific state.
