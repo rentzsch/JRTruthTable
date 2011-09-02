@@ -1,10 +1,17 @@
-#import <Foundation/Foundation.h>
 #import "JRTruthTable.h"
 
 int main(int argc, const char *argv[]) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    JRTruthTable *truthTable = [[[JRTruthTable alloc] initWithColumnsAndRows:
+    NSMutableDictionary *conditions = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       JRYES, @"upekPresent",
+                                       JRYES, @"puppyPresent",
+                                       nil];
+    JRTruthTableDictionaryConditionSource *conditionSource = [[[JRTruthTableDictionaryConditionSource alloc] init] autorelease];
+    conditionSource.dictionary = conditions;
+    
+    JRTruthTable *truthTable = [[[JRTruthTable alloc] initWithConditionSource:conditionSource
+                                                               columnsAndRows:
                                  @"upekPresent", @"puppyPresent",    JRTruthTable_EndOfColumns,
                                  JRYES,          JRYES,              @"UpekUI",
                                  JRNO,           JRYES,              @"PuppyUI",
@@ -14,14 +21,17 @@ int main(int argc, const char *argv[]) {
     
     assert([@"UpekUI" isEqualToString:truthTable.currentState]);
     
-    [truthTable updateCondition:@"upekPresent" value:JRNO];
+    [conditions setObject:JRNO forKey:@"upekPresent"];
+    [truthTable reload];
     assert([@"PuppyUI" isEqualToString:truthTable.currentState]);
     
-    [truthTable updateCondition:@"upekPresent" value:JRYES];
+    [conditions setObject:JRYES forKey:@"upekPresent"];
+    [truthTable reload];
     assert([@"UpekUI" isEqualToString:truthTable.currentState]);
     
-    [truthTable updateCondition:@"upekPresent" value:JRNO];
-    [truthTable updateCondition:@"puppyPresent" value:JRNO];
+    [conditions setObject:JRNO forKey:@"upekPresent"];
+    [conditions setObject:JRNO forKey:@"puppyPresent"];
+    [truthTable reload];
     assert([@"NoUI" isEqualToString:truthTable.currentState]);
     
     [pool drain];
