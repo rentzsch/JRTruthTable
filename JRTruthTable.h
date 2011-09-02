@@ -1,4 +1,4 @@
-// JRTruthTable.h semver:0.0.1
+// JRTruthTable.h semver:0.0.2
 //   Copyright (c) 2011 Jonathan 'Wolf' Rentzsch: http://rentzsch.com
 //   Some rights reserved: http://opensource.org/licenses/MIT
 //   https://github.com/rentzsch/JRTruthTable
@@ -8,6 +8,8 @@
 #ifndef JRYES
     #define JRYES (NSNumber*)kCFBooleanTrue
     #define JRNO  (NSNumber*)kCFBooleanFalse
+    #define jrT   JRYES
+    #define jrF   JRNO
 #endif
 
 extern NSString * const JRTruthTable_EndOfColumns;
