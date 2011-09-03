@@ -1,5 +1,15 @@
 #import "JRTruthTable.h"
 
+@interface StateChangeNotificationCatcher : NSObject {
+#ifndef NOIVARS
+  @protected
+    NSNotification *lastNotification;    
+#endif
+}
+@property(retain) NSNotification *lastNotification;
+- (id)initWithTruthTable:(JRTruthTable*)truthTable_;
+@end
+
 int main(int argc, const char *argv[]) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
@@ -19,7 +29,12 @@ int main(int argc, const char *argv[]) {
                                  JRNO,           JRNO,               @"NoUI",
                                  nil] autorelease];
     
+    StateChangeNotificationCatcher *catcher = [[[StateChangeNotificationCatcher alloc] initWithTruthTable:truthTable] autorelease];
+    
     assert([@"UpekUI" isEqualToString:truthTable.currentState]);
+    assert(catcher.lastNotification == nil);
+    [truthTable reload];
+    assert(catcher.lastNotification != nil);
     
     [conditions setObject:JRNO forKey:@"upekPresent"];
     [truthTable reload];
@@ -39,3 +54,26 @@ int main(int argc, const char *argv[]) {
     printf("success\n");
     return 0;
 }
+
+@implementation StateChangeNotificationCatcher
+@synthesize lastNotification;
+
+- (id)initWithTruthTable:(JRTruthTable*)truthTable_ {
+    self = [super init];
+    if (self) {
+        [truthTable_ addStateChangeObserver:self selector:@selector(stateChanged:)];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[lastNotification release];
+	[super dealloc];
+}
+
+- (void)stateChanged:(NSNotification*)notification_ {
+    self.lastNotification = notification_;
+}
+
+@end

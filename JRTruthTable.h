@@ -33,6 +33,8 @@ extern NSString * const JRTruthTable_CurrentStateChangedNotification_PreviousSta
 
 - (void)reload;
 - (void)reloadCondition:(NSString*)conditionName_;
+
+- (void)addStateChangeObserver:(id)observer_ selector:(SEL)selector_;
 @end
 
 

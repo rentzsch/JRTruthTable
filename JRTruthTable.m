@@ -127,11 +127,13 @@ NSString * const JRTruthTable_CurrentStateChangedNotification_PreviousState = @"
         [currentConditionsCache setObject:[conditionSource truthTable:self currentValueOfCondition:conditionName]
                                    forKey:conditionName];
     }
-    if (oldCurrentState && ![[self currentState] isEqual:oldCurrentState]) {
+    if (![oldCurrentState isEqual:[self currentState]]) {
+        NSDictionary *userInfo = oldCurrentState
+            ? [NSDictionary dictionaryWithObject:oldCurrentState forKey:JRTruthTable_CurrentStateChangedNotification_PreviousState]
+            : [NSDictionary dictionary];
         [[NSNotificationCenter defaultCenter] postNotificationName:JRTruthTable_CurrentStateChangedNotification
                                                             object:self
-                                                          userInfo:[NSDictionary dictionaryWithObject:oldCurrentState
-                                                                                               forKey:JRTruthTable_CurrentStateChangedNotification_PreviousState]];
+                                                          userInfo:userInfo];
     }
 }
 
@@ -141,6 +143,20 @@ NSString * const JRTruthTable_CurrentStateChangedNotification_PreviousState = @"
 
 - (void)reloadCondition:(NSString*)conditionName_ {
     [self reloadConditions:[NSArray arrayWithObject:conditionName_]];
+}
+
+- (void)addStateChangeObserver:(id)observer_ selector:(SEL)selector_ {
+    NSParameterAssert(observer_);
+    NSParameterAssert(selector_);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:observer_
+                                             selector:selector_
+                                                 name:JRTruthTable_CurrentStateChangedNotification
+                                               object:self];
+    NSNotification *notification = [NSNotification notificationWithName:JRTruthTable_CurrentStateChangedNotification
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionary]];
+    [observer_ performSelector:selector_ withObject:notification];
 }
 
 @end
