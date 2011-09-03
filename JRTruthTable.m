@@ -1,4 +1,4 @@
-// JRTruthTable.m semver:0.0.3
+// JRTruthTable.m semver:0.0.4
 //   Copyright (c) 2011 Jonathan 'Wolf' Rentzsch: http://rentzsch.com
 //   Some rights reserved: http://opensource.org/licenses/MIT
 //   https://github.com/rentzsch/JRTruthTable
